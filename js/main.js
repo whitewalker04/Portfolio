@@ -1,11 +1,31 @@
+import{ includeHtml } from './service.js';
+
 const menuBtn = document.querySelector( '.menu-btn' );
 const hamburger = document.querySelector( '.menu-btn_burger' );
 const nav = document.querySelector( '.nav' );
-const menuNav = document.querySelector( '.menu-nav' );
-const navItems = document.querySelectorAll( '.menu-nav_item' );
-let hiddenMenu = true;
+var menuNav = null,
+    navItems = null;
 
+const socialIcons = document.querySelector( '.social-icons' );
+await includeHtml('../pages/subpages/social-icons.html', socialIcons );
+
+let hiddenMenu = true;
 menuBtn.addEventListener( 'click', toggleMenu );
+
+
+async function loadSubPages() {
+    try{
+        let result = await includeHtml('../pages/subpages/nav-options.html', nav );
+        menuNav = await document.querySelector( '.menu-nav' );
+        navItems = await document.querySelectorAll( '.menu-nav_item' );
+        menuBtn.addEventListener( 'click', toggleMenu );
+    } catch( ex ){
+        console.error( ex );
+    }
+
+}
+
+loadSubPages();
 
 function toggleMenu() {
     if( hiddenMenu ) {
